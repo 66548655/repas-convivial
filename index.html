@@ -11,21 +11,44 @@
 <body>
   <h1>Repas Convivial</h1>
   <p>Application pour organiser les repas en famille</p>
+
+  <div id="fridge">
+    <h2>Reste dans le frigo / Proposition de repas</h2>
+    <textarea placeholder="Écrivez ici les restes, idées de plats..."></textarea>
+  </div>
+
   <div id="planning">
     <h2>Planning de la semaine</h2>
-    <p>(À remplir ensemble)</p>
-    <textarea placeholder="Lundi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mardi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mercredi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Jeudi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Vendredi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Samedi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Dimanche - Qui cuisine ? Quoi ?"></textarea>
+    <p>(Midi et soir pour chaque jour)</p>
+    <textarea placeholder="Lundi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Lundi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Mardi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Mardi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Mercredi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Mercredi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Jeudi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Jeudi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Vendredi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Vendredi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Samedi midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Samedi soir - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Dimanche midi - Qui cuisine ? Quoi ?"></textarea>
+    <textarea placeholder="Dimanche soir - Qui cuisine ? Quoi ?"></textarea>
   </div>
+
   <div id="courses">
     <h2>Liste de courses</h2>
-    <textarea placeholder="Ajoutez ici les courses à faire..."></textarea>
+    <ul id="shopping-list">
+      <li><input type="checkbox"> Lait</li>
+      <li><input type="checkbox"> Pain</li>
+      <li><input type="checkbox"> Œufs</li>
+      <li><input type="checkbox"> Fromage</li>
+      <li><input type="checkbox"> Fruits</li>
+      <li><input type="checkbox"> Légumes</li>
+    </ul>
+    <textarea placeholder="Ajoutez d'autres articles ici..."></textarea>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
