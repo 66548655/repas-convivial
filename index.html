@@ -1,52 +1,30 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="manifest.json">
   <title>Repas Convivial</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js"></script>
 </head>
 <body>
   <h1>Repas Convivial</h1>
-  <p>Application pour organiser les repas en famille</p>
 
   <div id="fridge">
-    <h2>Reste dans le frigo / Proposition de repas</h2>
-    <textarea placeholder="Écrivez ici les restes, idées de plats..."></textarea>
+    <h2>Restes / Propositions</h2>
+    <textarea id="restes"></textarea>
   </div>
 
   <div id="planning">
     <h2>Planning de la semaine</h2>
-    <p>(Midi et soir pour chaque jour)</p>
-    <textarea placeholder="Lundi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Lundi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mardi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mardi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mercredi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Mercredi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Jeudi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Jeudi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Vendredi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Vendredi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Samedi midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Samedi soir - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Dimanche midi - Qui cuisine ? Quoi ?"></textarea>
-    <textarea placeholder="Dimanche soir - Qui cuisine ? Quoi ?"></textarea>
+    <div id="planning-content"></div>
   </div>
 
   <div id="courses">
     <h2>Liste de courses</h2>
-    <ul id="shopping-list">
-      <li><input type="checkbox"> Lait</li>
-      <li><input type="checkbox"> Pain</li>
-      <li><input type="checkbox"> Œufs</li>
-      <li><input type="checkbox"> Fromage</li>
-      <li><input type="checkbox"> Fruits</li>
-      <li><input type="checkbox"> Légumes</li>
-    </ul>
-    <textarea placeholder="Ajoutez d'autres articles ici..."></textarea>
+    <ul id="courses-list"></ul>
+    <textarea id="new-course" placeholder="Ajouter un article"></textarea>
+    <button id="add-course">Ajouter</button>
   </div>
 
   <script src="script.js"></script>
