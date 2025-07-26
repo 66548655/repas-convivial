@@ -1,173 +1,132 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Repas Convivial</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #fefefe;
+      background-color: #fff8f0;
       color: #333;
-      max-width: 900px;
-      margin: auto;
+      margin: 0;
       padding: 20px;
     }
     h1 {
       text-align: center;
-      color: #3d9970;
-    }
-    .logo {
-      width: 50px;
-      vertical-align: middle;
+      color: #d2691e;
     }
     h2 {
-      color: #0074D9;
-      border-bottom: 2px solid #7FDBFF;
-      padding-bottom: 5px;
+      color: #8b4513;
+      margin-top: 30px;
     }
-    .day {
-      margin-bottom: 10px;
-      padding: 10px;
-      background: #f0f8ff;
-      border-radius: 10px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
     }
     textarea {
       width: 100%;
-      min-height: 50px;
-      margin-top: 5px;
-      font-size: 16px;
-      padding: 5px;
+      border: none;
+      resize: none;
+      background-color: #fffaf0;
+      font-size: 14px;
     }
     .section {
-      margin-top: 20px;
-      padding: 10px;
-      background: #fffbe6;
-      border: 1px solid #ffdc00;
-      border-radius: 10px;
+      margin-top: 40px;
     }
     .checkbox-list label {
       display: block;
-      margin: 5px 0;
+      margin-bottom: 5px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 100px;
     }
   </style>
 </head>
 <body>
-  <h1><img src="https://img.icons8.com/emoji/48/fork-and-knife-with-plate-emoji.png" class="logo"/> Repas Convivial</h1>
-
-  <div id="planning"></div>
-
-  <div class="section">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Example.svg" alt="Logo" class="logo" />
+  <h1>Repas Convivial</h1>  <div class="section" id="planning">
+    <h2>Planning des repas (2 semaines)</h2>
+    <table id="mealTable"></table>
+  </div>  <div class="section">
     <h2>Reste dans le frigo / Propositions</h2>
-    <div id="reste" class="checkbox-list"></div>
-  </div>
-
-  <div class="section">
+    <div class="checkbox-list" id="resteList"></div>
+  </div>  <div class="section">
     <h2>Liste de courses</h2>
-    <div id="courses" class="checkbox-list"></div>
-  </div>
-
-  <script>
+    <div class="checkbox-list" id="courseList"></div>
+  </div>  <script>
     const sheetId = "1cAcHJwjJDSh-OFEzePO8w2u61LUN3RjQF3TVpothqkA";
     const apiKey = "AIzaSyCvhSun_wThUxUJj5N2imsj0Ej4YyLU1WI";
+    const base = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}`;
 
-    const days = [
-      "Vendredi 25 juillet", "Samedi 26 juillet", "Dimanche 27 juillet", "Lundi 28 juillet",
-      "Mardi 29 juillet", "Mercredi 30 juillet", "Jeudi 31 juillet", "Vendredi 1er août",
-      "Samedi 2 août", "Dimanche 3 août", "Lundi 4 août", "Mardi 5 août",
-      "Mercredi 6 août", "Jeudi 7 août"
-    ];
+    const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
 
-    const planningDiv = document.getElementById("planning");
-
-    function createTextarea(id, label) {
-      const container = document.createElement("div");
-      container.className = "day";
-
-      const title = document.createElement("strong");
-      title.textContent = label;
-      container.appendChild(title);
-
-      const textarea = document.createElement("textarea");
-      textarea.id = id;
-      textarea.placeholder = "Écris ici...";
-      textarea.addEventListener("input", saveAll);
-      container.appendChild(textarea);
-
-      return container;
-    }
-
-    days.forEach((day) => {
-      planningDiv.appendChild(createTextarea(`${day}-midi`, `${day} - midi`));
-      planningDiv.appendChild(createTextarea(`${day}-soir`, `${day} - soir`));
-    });
-
-    function addCheckboxItem(container, prefix) {
-      const index = container.children.length + 1;
-      const id = `${prefix}-item-${index}`;
-      const label = document.createElement("label");
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.id = id;
-      checkbox.addEventListener("change", saveAll);
-      const input = document.createElement("input");
-      input.type = "text";
-      input.placeholder = "Élément...";
-      input.addEventListener("input", () => {
-        saveAll();
-        if (index === 5) addCheckboxItem(container, prefix);
-      });
-      label.appendChild(checkbox);
-      label.appendChild(input);
-      container.appendChild(label);
-    }
-
-    const resteDiv = document.getElementById("reste");
-    const coursesDiv = document.getElementById("courses");
-    for (let i = 0; i < 5; i++) {
-      addCheckboxItem(resteDiv, "reste");
-      addCheckboxItem(coursesDiv, "course");
-    }
-
-    function getAllData() {
-      const data = {};
-      days.forEach((day) => {
-        data[`${day}-midi`] = document.getElementById(`${day}-midi`).value;
-        data[`${day}-soir`] = document.getElementById(`${day}-soir`).value;
-      });
-
-      const reste = [];
-      resteDiv.querySelectorAll("label").forEach((label) => {
-        const input = label.querySelector("input[type='text']");
-        const check = label.querySelector("input[type='checkbox']");
-        if (input) reste.push(`${check.checked ? "[x]" : "[ ]"} ${input.value}`);
-      });
-      data["reste"] = reste.join("\n");
-
-      const courses = [];
-      coursesDiv.querySelectorAll("label").forEach((label) => {
-        const input = label.querySelector("input[type='text']");
-        const check = label.querySelector("input[type='checkbox']");
-        if (input) courses.push(`${check.checked ? "[x]" : "[ ]"} ${input.value}`);
-      });
-      data["courses"] = courses.join("\n");
-
-      return data;
-    }
-
-    function saveAll() {
-      const data = getAllData();
-      const values = [["Clé", "Contenu"]];
-      for (const key in data) {
-        values.push([key, data[key]]);
+    const generateDates = () => {
+      const dates = [];
+      let today = new Date();
+      for (let w = 0; w < 2; w++) {
+        for (let i = 0; i < 7; i++) {
+          const d = new Date();
+          d.setDate(today.getDate() + i + w * 7);
+          const dateStr = d.toLocaleDateString("fr-FR", { weekday: 'long', day: 'numeric', month: 'short' });
+          dates.push(dateStr);
+        }
       }
+      return dates;
+    };
 
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:append?valueInputOption=RAW&key=${apiKey}`, {
-        method: "POST",
-        body: JSON.stringify({ values }),
-        headers: { "Content-Type": "application/json" }
-      });
-    }
+    const createMealTable = () => {
+      const mealTable = document.getElementById("mealTable");
+      mealTable.innerHTML = "<tr><th>Jour</th><th>Midi</th><th>Soir</th></tr>";
+      generateDates().forEach(day => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${day}</td>
+          <td><textarea data-day="${day}" data-meal="midi"></textarea></td><td><textarea data-day="${day}" data-meal="soir"></textarea></td>
+    `;
+    mealTable.appendChild(row);
+  });
+};
+
+const createCheckList = (containerId, title) => {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  for (let i = 0; i < 5; i++) {
+    const div = document.createElement("div");
+    div.innerHTML = `<label><input type="checkbox" class="${containerId}-item"> <input type="text" class="${containerId}-input" data-index="${i}" /></label>`;
+    container.appendChild(div);
+  }
+};
+
+const loadData = async () => {
+  try {
+    const resp = await fetch(`${base}?includeGridData=true&key=${apiKey}`);
+    const data = await resp.json();
+    // On ne traite pas encore les données mais tu peux les intégrer ici.
+  } catch (e) {
+    console.error("Erreur de chargement:", e);
+  }
+};
+
+const saveToSheet = () => {
+  // À implémenter : envoyer les valeurs vers Sheets via l'API.
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  createMealTable();
+  createCheckList("resteList", "Reste");
+  createCheckList("courseList", "Courses");
+  loadData();
+  // Événement à ajouter pour sauvegarder automatiquement.
+});
+
   </script>
 </body>
 </html>
